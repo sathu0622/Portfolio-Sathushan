@@ -1,5 +1,23 @@
-const CONTACT_API =
-  import.meta.env.VITE_CONTACT_API_URL?.trim() || "/api/contact";
+const CONTACT_API = (() => {
+  const configuredUrl = import.meta.env.VITE_CONTACT_API_URL?.trim();
+  if (!configuredUrl) {
+    return "/api/contact";
+  }
+
+  if (configuredUrl.startsWith("/")) {
+    return configuredUrl;
+  }
+
+  try {
+    const url = new URL(configuredUrl);
+    if (url.pathname === "/" || url.pathname === "") {
+      return `${configuredUrl.replace(/\/+$/, "")}/api/contact`;
+    }
+    return configuredUrl;
+  } catch {
+    return configuredUrl;
+  }
+})();
 
 export async function submitContactForm({ name, email, message, subject = "" }) {
   const response = await fetch(CONTACT_API, {
