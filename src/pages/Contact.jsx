@@ -1,9 +1,46 @@
-import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
+import { useState } from "react";
+import { Mail, Phone, MapPin, Github, Linkedin, Send, Loader2 } from "lucide-react";
 import { personal } from "../data/portfolio";
+import { submitContactForm } from "../api/contact";
 
-
+const initialForm = { name: "", email: "", message: "" };
 
 export default function Contact() {
+  const [form, setForm] = useState(initialForm);
+  const [status, setStatus] = useState("idle");
+  const [feedback, setFeedback] = useState("");
+
+  const updateField = (field) => (event) => {
+    setForm((prev) => ({ ...prev, [field]: event.target.value }));
+    if (status !== "idle") {
+      setStatus("idle");
+      setFeedback("");
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus("submitting");
+    setFeedback("");
+
+    try {
+      const result = await submitContactForm({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        message: form.message.trim(),
+        subject: `Portfolio inquiry from ${form.name.trim() || "visitor"}`,
+      });
+      setStatus("success");
+      setFeedback(result.message || "Message sent successfully.");
+      setForm(initialForm);
+    } catch (error) {
+      setStatus("error");
+      setFeedback(error.message || "Something went wrong. Please try again.");
+    }
+  };
+
+  const isSubmitting = status === "submitting";
+
   return (
     <section>
       <p className="section-label">Get In Touch</p>
@@ -55,25 +92,84 @@ export default function Contact() {
           <p className="section-label" style={{ marginBottom: 20 }}>
             Send a Message
           </p>
-          <form style={{ display: "flex", flexDirection: "column", gap: 16 }} onSubmit={(e) => e.preventDefault()}>
-            {["Name", "Email", "Message"].map((field) => (
-              <div key={field}>
-                <label className="contact-label" style={{ display: "block", marginBottom: 8 }}>
-                  {field}
-                </label>
-                {field === "Message" ? (
-                  <textarea
-                    rows={4}
-                    placeholder={`Your ${field.toLowerCase()}`}
-                    style={inputStyle}
-                  />
-                ) : (
-                  <input type={field === "Email" ? "email" : "text"} placeholder={`Your ${field.toLowerCase()}`} style={inputStyle} />
-                )}
-              </div>
-            ))}
-            <button type="submit" className="btn-outline" style={{ justifyContent: "center", width: "100%" }}>
-              <Send size={16} /> Send Message
+          <form style={{ display: "flex", flexDirection: "column", gap: 16 }} onSubmit={handleSubmit} noValidate>
+            <div>
+              <label className="contact-label" style={{ display: "block", marginBottom: 8 }} htmlFor="contact-name">
+                Name
+              </label>
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                required
+                value={form.name}
+                onChange={updateField("name")}
+                placeholder="Your name"
+                style={inputStyle}
+                disabled={isSubmitting}
+              />
+            </div>
+            <div>
+              <label className="contact-label" style={{ display: "block", marginBottom: 8 }} htmlFor="contact-email">
+                Email
+              </label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                required
+                value={form.email}
+                onChange={updateField("email")}
+                placeholder="Your email"
+                style={inputStyle}
+                disabled={isSubmitting}
+              />
+            </div>
+            <div>
+              <label className="contact-label" style={{ display: "block", marginBottom: 8 }} htmlFor="contact-message">
+                Message
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                rows={4}
+                required
+                value={form.message}
+                onChange={updateField("message")}
+                placeholder="Your message"
+                style={inputStyle}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {feedback ? (
+              <p
+                role="status"
+                style={{
+                  margin: 0,
+                  fontSize: "0.85rem",
+                  color: status === "success" ? "#22c55e" : "#ef4444",
+                }}
+              >
+                {feedback}
+              </p>
+            ) : null}
+
+            <button
+              type="submit"
+              className="btn-outline"
+              style={{ justifyContent: "center", width: "100%" }}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Sending...
+                </>
+              ) : (
+                <>
+                  <Send size={16} /> Send Message
+                </>
+              )}
             </button>
           </form>
         </div>
