@@ -65,7 +65,7 @@ export default function Home() {
         <p className="hero-greeting">Hi there! 👋</p>
         <h1 className="hero-title">Creative Full Stack Developer.</h1>
         <p className="hero-desc">{personal.summary}</p>
-        <a href="/resume.pdf" download className="btn-outline">
+        <a href="/Resume_Sathushan Thiyagalingam.pdf" download className="btn-outline">
           <Download size={18} />
           Download CV
         </a>
