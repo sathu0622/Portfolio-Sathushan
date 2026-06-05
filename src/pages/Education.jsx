@@ -13,7 +13,7 @@ export default function Education() {
     <section>
       <p className="section-label">Academic Background</p>
       <h1 className="page-section-title">Education</h1>
-      <p className="page-section-sub">My academic journey and extracurricular achievements.</p>
+      <p className="page-section-sub">My academic journey.</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 2 }}>
         {education.map((edu, i) => (
@@ -49,7 +49,6 @@ export default function Education() {
                 <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.78rem", color: "var(--text-muted)" }}>
                   <Calendar size={12} /> {edu.period}
                 </span>
-                <span className="tag-pill">{edu.status}</span>
               </div>
             </div>
           </article>
