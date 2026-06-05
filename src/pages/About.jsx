@@ -23,7 +23,7 @@ export default function About() {
               {firstName}
             </span>
             <h1 className="about-name">{personal.name}</h1>
-            <p className="about-tagline">Your Web Experts</p>
+            <p className="about-tagline">My Web Experts</p>
           </div>
 
           {stats.slice(0, 3).map((s) => (
