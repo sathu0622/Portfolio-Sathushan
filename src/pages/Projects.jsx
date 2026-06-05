@@ -3,7 +3,7 @@ import { ExternalLink, Github } from "lucide-react";
 import { projects } from "../data/portfolio";
 import { scrollToProject } from "../hooks/useScrollSpy";
 
-const categories = ["All", "Full Stack", "Frontend", "Backend", "AI/ML"];
+const categories = ["All", "Full Stack", "Backend", "AI/ML"];
 
 export default function Projects() {
   const [active, setActive] = useState("All");
