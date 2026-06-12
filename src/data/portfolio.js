@@ -76,7 +76,7 @@ export const experience = [
     bullets: [
       "Developed 4 web applications, including e-commerce, management systems, and informational sites using Node.js, React, MongoDB.",
       "Enhanced SEO, image performance, query efficiency, and leveraged secure payment gateways to boost site load times and user experience",
-      "•	Deployed applications with CI/CD pipelines, ensuring efficient updates and stable production environments.",
+      "Deployed applications with CI/CD pipelines, ensuring efficient updates and stable production environments.",
     ],
   },
 ];
